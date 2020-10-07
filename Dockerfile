@@ -14,7 +14,7 @@ COPY . /srv
 
 RUN \
 # Install development tools
-    apk add --virtual .dev-deps clang g++ linux-headers \
+    apk add --virtual .dev-deps clang g++ linux-headers git \
     && addgroup -S oauth \
     && adduser -S oauth -G oauth \
     && chown -R oauth:oauth /srv \
