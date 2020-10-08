@@ -1,4 +1,4 @@
-FROM python:rc-alpine
+FROM python:alpine
 
 ENV SHELL /bin/sh
 ENV CC /usr/bin/clang
@@ -10,11 +10,11 @@ ENV PIP_DISABLE_PIP_VERSION_CHECK 1
 ENV PIP_NO_CACHE_DIR 0
 
 WORKDIR /srv
-COPY . /srv
+COPY requirements.txt /srv
 
 RUN \
 # Install development tools
-    apk add --virtual .dev-deps clang g++ linux-headers git \
+    apk add --virtual .dev-deps clang g++ linux-headers \
     && addgroup -S oauth \
     && adduser -S oauth -G oauth \
     && chown -R oauth:oauth /srv \
@@ -22,6 +22,8 @@ RUN \
 # Cleanup
     && apk del .dev-deps \
     && rm -rf /tmp/* /var/cache/apk/*
+
+COPY . /srv
 
 USER oauth
 ENTRYPOINT ["uwsgi", "--ini", "wsgi.ini"]
